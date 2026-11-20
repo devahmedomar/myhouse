@@ -1,6 +1,8 @@
 import { Category } from './category.model';
 import { TransactionType, User } from './user.model';
 
+export type { TransactionType } from './user.model';
+
 export interface Transaction {
   _id: string;
   type: TransactionType;
@@ -22,6 +24,7 @@ export interface TransactionPayload {
 }
 
 export interface TransactionQuery {
+  [key: string]: string | number | boolean | null | undefined;
   month?: number | null;
   year?: number | null;
   type?: TransactionType | null;
