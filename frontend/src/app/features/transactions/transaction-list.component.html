@@ -1,0 +1,106 @@
+<div class="page">
+  <div class="page-header">
+    <h1>{{ labels.transactions }}</h1>
+    <button type="button" class="btn btn-secondary btn-small" (click)="exportCsv()">{{ labels.exportCsv }}</button>
+  </div>
+
+  <div class="card filters-card">
+    <div class="filters">
+      <div class="field">
+        <label>{{ labels.month }}</label>
+        <select [(ngModel)]="month" (ngModelChange)="applyFilters()">
+          <option [ngValue]="''">{{ labels.allMonths }}</option>
+          <option *ngFor="let m of months; let i = index" [ngValue]="i + 1">{{ m }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>{{ labels.year }}</label>
+        <select [(ngModel)]="year" (ngModelChange)="applyFilters()">
+          <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>{{ labels.type }}</label>
+        <select [(ngModel)]="type" (ngModelChange)="applyFilters()">
+          <option value="">{{ labels.all }}</option>
+          <option value="expense">{{ labels.expense }}</option>
+          <option value="income">{{ labels.income }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>{{ labels.category }}</label>
+        <select [(ngModel)]="categoryId" (ngModelChange)="applyFilters()">
+          <option value="">{{ labels.all }}</option>
+          <option *ngFor="let category of filteredCategories" [value]="category._id">
+            {{ category.icon }} {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="field">
+        <label>{{ labels.paidBy }}</label>
+        <select [(ngModel)]="paidBy" (ngModelChange)="applyFilters()">
+          <option value="">{{ labels.all }}</option>
+          <option *ngFor="let user of users" [value]="user._id">{{ user.name }}</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>{{ labels.noteSearch }}</label>
+        <input type="text" [(ngModel)]="q" (ngModelChange)="applyFilters()" [placeholder]="labels.noteSearch" />
+      </div>
+    </div>
+  </div>
+
+  <app-loading *ngIf="loading && !items.length"></app-loading>
+
+  <div class="card table-card" *ngIf="!loading || items.length">
+    <div class="table-wrap">
+      <table *ngIf="items.length; else empty">
+        <thead>
+          <tr>
+            <th>{{ labels.date }}</th>
+            <th>{{ labels.type }}</th>
+            <th>{{ labels.category }}</th>
+            <th>{{ labels.amount }}</th>
+            <th>{{ labels.paidBy }}</th>
+            <th>{{ labels.note }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tx of items">
+            <td>{{ tx.date | date: 'yyyy-MM-dd' }}</td>
+            <td>
+              <span class="badge" [class.badge-expense]="tx.type === 'expense'" [class.badge-income]="tx.type === 'income'">
+                {{ tx.type === 'expense' ? labels.expense : labels.income }}
+              </span>
+            </td>
+            <td>{{ tx.category?.icon }} {{ tx.category?.name }}</td>
+            <td [class.income-text]="tx.type === 'income'" [class.expense-text]="tx.type === 'expense'">
+              {{ tx.amount | number: '1.0-2' }} {{ currency }}
+            </td>
+            <td>{{ tx.paidBy?.name }}</td>
+            <td class="note-cell">{{ tx.note || '—' }}</td>
+            <td class="row-actions">
+              <button type="button" class="btn btn-secondary btn-small" (click)="edit(tx)">{{ labels.edit }}</button>
+              <button type="button" class="btn btn-danger btn-small" (click)="requestDelete(tx)">{{ labels.delete }}</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #empty><p class="empty-state">{{ labels.noData }}</p></ng-template>
+    </div>
+
+    <div class="load-more" *ngIf="canLoadMore">
+      <button type="button" class="btn btn-secondary" (click)="loadMore()" [disabled]="loading">{{ labels.loadMore }}</button>
+    </div>
+  </div>
+</div>
+
+<a routerLink="/transactions/new" class="fab" [attr.aria-label]="labels.newTransaction">+</a>
+
+<app-confirm
+  [visible]="confirmVisible"
+  [message]="labels.deleteConfirm"
+  (confirmed)="confirmDelete()"
+  (cancelled)="confirmVisible = false"
+></app-confirm>

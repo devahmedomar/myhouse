@@ -1,0 +1,81 @@
+<div class="page">
+  <div class="page-header">
+    <h1>{{ labels.categories }}</h1>
+    <div class="header-actions">
+      <select [(ngModel)]="typeFilter" (ngModelChange)="load()" aria-label="النوع">
+        <option value="">{{ labels.all }}</option>
+        <option value="expense">{{ labels.expense }}</option>
+        <option value="income">{{ labels.income }}</option>
+      </select>
+      <button type="button" class="btn" (click)="openAdd()">{{ labels.addCategory }}</button>
+    </div>
+  </div>
+
+  <div class="card form-card" *ngIf="formVisible">
+    <h3>{{ editingId ? labels.editCategory : labels.addCategory }}</h3>
+    <form [formGroup]="form" (ngSubmit)="submitForm()" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="cat-name">{{ labels.name }}</label>
+          <input id="cat-name" type="text" formControlName="name" />
+          <small class="field-error" *ngIf="form.controls.name.touched && form.controls.name.errors?.['required']">
+            {{ messages.required }}
+          </small>
+        </div>
+        <div class="field">
+          <label for="cat-icon">{{ labels.icon }}</label>
+          <input id="cat-icon" type="text" formControlName="icon" placeholder="🏠" />
+        </div>
+        <div class="field" *ngIf="!editingId">
+          <label for="cat-type">{{ labels.type }}</label>
+          <select id="cat-type" formControlName="type">
+            <option value="expense">{{ labels.expense }}</option>
+            <option value="income">{{ labels.income }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn">{{ labels.save }}</button>
+        <button type="button" class="btn btn-secondary" (click)="closeForm()">{{ labels.cancel }}</button>
+      </div>
+    </form>
+  </div>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <div class="card" *ngIf="!loading">
+    <div class="table-wrap" *ngIf="categories.length; else empty">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ labels.icon }}</th>
+            <th>{{ labels.name }}</th>
+            <th>{{ labels.type }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let category of categories">
+            <td>{{ category.icon || '—' }}</td>
+            <td>{{ category.name }}</td>
+            <td>{{ category.type === 'expense' ? labels.expense : labels.income }}</td>
+            <td class="row-actions">
+              <button type="button" class="btn btn-secondary btn-small" (click)="openEdit(category)">{{ labels.edit }}</button>
+              <button type="button" class="btn btn-danger btn-small" (click)="requestDelete(category)">{{ labels.delete }}</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #empty><p class="empty-state">{{ labels.noData }}</p></ng-template>
+  </div>
+</div>
+
+<a routerLink="/transactions/new" class="fab" aria-label="إضافة معاملة">+</a>
+
+<app-confirm
+  [visible]="confirmVisible"
+  [message]="labels.deleteConfirm"
+  (confirmed)="confirmDelete()"
+  (cancelled)="confirmVisible = false"
+></app-confirm>

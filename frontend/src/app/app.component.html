@@ -1,0 +1,60 @@
+<aside class="sidebar" *ngIf="!isLoginPage">
+  <div class="brand">
+    <span class="brand-mark">⌂</span>
+    <span>{{ labels.appName }}</span>
+  </div>
+
+  <nav class="side-nav">
+    <a
+      *ngFor="let link of navLinks"
+      [routerLink]="link.path"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: !!link.exact }"
+    >
+      <span class="nav-icon">{{ link.icon }}</span>
+      <span>{{ link.label }}</span>
+    </a>
+  </nav>
+
+  <div class="side-user" *ngIf="auth.user as user">
+    <span class="avatar">{{ user.name.charAt(0) }}</span>
+    <div>
+      <strong>{{ user.name }}</strong>
+      <small class="muted">{{ user.email }}</small>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn-secondary logout-side" (click)="logout()">
+    {{ labels.logout }}
+  </button>
+</aside>
+
+<div class="main-area" [class.login-area]="isLoginPage">
+  <header class="topbar" *ngIf="!isLoginPage">
+    <h2>{{ labels.appName }}</h2>
+    <div class="topbar-actions">
+      <span *ngIf="auth.user as user">{{ labels.welcome }}، {{ user.name }}</span>
+      <button type="button" class="btn btn-secondary btn-small" (click)="logout()">
+        {{ labels.logout }}
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<nav class="bottom-tabs" *ngIf="!isLoginPage">
+  <a
+    *ngFor="let link of navLinks"
+    [routerLink]="link.path"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: !!link.exact }"
+  >
+    <span class="tab-icon">{{ link.icon }}</span>
+    <span>{{ link.label }}</span>
+  </a>
+</nav>
+
+<app-toast></app-toast>

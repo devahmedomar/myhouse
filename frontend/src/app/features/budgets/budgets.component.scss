@@ -1,0 +1,41 @@
+.period-controls {
+  display: flex;
+  gap: 0.5rem;
+
+  select {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0.45rem 0.6rem;
+    background: #fff;
+    color: var(--text);
+  }
+}
+
+.total-field {
+  max-width: 320px;
+}
+
+.section-title {
+  font-size: 1rem;
+  margin: 1.25rem 0 0.75rem;
+}
+
+.budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+
+  input {
+    width: 140px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0.5rem;
+  }
+}
+
+.save-button {
+  margin-top: 1.25rem;
+}

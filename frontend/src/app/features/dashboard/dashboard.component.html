@@ -1,0 +1,115 @@
+<div class="page">
+  <div class="page-header">
+    <h1>{{ labels.dashboard }}</h1>
+    <div class="period-controls">
+      <button type="button" class="btn btn-secondary btn-small" (click)="shiftMonth(-1)" [attr.aria-label]="labels.prevMonth">
+        ›
+      </button>
+      <select [(ngModel)]="month" (ngModelChange)="load()" aria-label="الشهر">
+        <option *ngFor="let m of months; let i = index" [ngValue]="i + 1">{{ m }}</option>
+      </select>
+      <select [(ngModel)]="year" (ngModelChange)="load()" aria-label="السنة">
+        <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+      </select>
+      <button type="button" class="btn btn-secondary btn-small" (click)="shiftMonth(1)" [attr.aria-label]="labels.nextMonth">
+        ‹
+      </button>
+    </div>
+  </div>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <ng-container *ngIf="!loading && data as dash">
+    <div class="summary-grid">
+      <div class="card summary income">
+        <span class="summary-label">{{ labels.totalIncome }}</span>
+        <strong>{{ dash.totals.income | number: '1.0-2' }} <small>{{ currency }}</small></strong>
+      </div>
+      <div class="card summary expense">
+        <span class="summary-label">{{ labels.totalExpenses }}</span>
+        <strong>{{ dash.totals.expenses | number: '1.0-2' }} <small>{{ currency }}</small></strong>
+      </div>
+      <div class="card summary balance">
+        <span class="summary-label">{{ labels.balance }}</span>
+        <strong>{{ dash.totals.balance | number: '1.0-2' }} <small>{{ currency }}</small></strong>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="card chart-card">
+        <h3>{{ labels.expensesByCategory }}</h3>
+        <div class="canvas-box">
+          <canvas baseChart [type]="'doughnut'" [data]="doughnutData" [options]="doughnutOptions"></canvas>
+        </div>
+      </div>
+      <div class="card chart-card">
+        <h3>{{ labels.dailyExpenses }}</h3>
+        <div class="canvas-box">
+          <canvas baseChart [type]="'bar'" [data]="barData" [options]="barOptions"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-grid">
+      <div class="card">
+        <h3>{{ labels.topCategories }}</h3>
+        <ul class="rank-list" *ngIf="dash.topCategories.length; else noTop">
+          <li *ngFor="let category of dash.topCategories">
+            <span>{{ category.icon }} {{ category.name }}</span>
+            <strong>{{ category.total | number: '1.0-2' }} {{ currency }}</strong>
+          </li>
+        </ul>
+        <ng-template #noTop><p class="empty-state">{{ labels.noData }}</p></ng-template>
+      </div>
+
+      <div class="card">
+        <h3>{{ labels.lastTransactions }}</h3>
+        <ul class="rank-list" *ngIf="dash.lastTransactions.length; else noLast">
+          <li *ngFor="let tx of dash.lastTransactions.slice(0, 5)">
+            <span>{{ tx.category?.name }} <small class="muted">({{ tx.note || '—' }})</small></span>
+            <strong [class.income-text]="tx.type === 'income'" [class.expense-text]="tx.type === 'expense'">
+              {{ tx.type === 'income' ? '+' : '-' }}{{ tx.amount | number: '1.0-2' }}
+            </strong>
+          </li>
+        </ul>
+        <ng-template #noLast><p class="empty-state">{{ labels.noData }}</p></ng-template>
+        <a routerLink="/transactions" class="link">{{ labels.transactions }} ←</a>
+      </div>
+
+      <div class="card">
+        <h3>{{ labels.spentBy }}</h3>
+        <ul class="rank-list" *ngIf="dash.byUser.length; else noUsers">
+          <li *ngFor="let user of dash.byUser">
+            <span>{{ user.name }}</span>
+            <strong>{{ user.total | number: '1.0-2' }} {{ currency }}</strong>
+          </li>
+        </ul>
+        <ng-template #noUsers><p class="empty-state">{{ labels.noData }}</p></ng-template>
+      </div>
+
+      <div class="card">
+        <h3>{{ labels.budgetProgress }}</h3>
+        <div *ngIf="progress.length; else noBudget">
+          <div class="progress-row" *ngFor="let item of progress">
+            <div class="progress-head">
+              <span>{{ item.label }}</span>
+              <span class="muted">{{ item.spent | number: '1.0-2' }} / {{ item.budget | number: '1.0-2' }}</span>
+            </div>
+            <div class="progress-track">
+              <div
+                class="progress-fill"
+                [class.danger]="progressClass(item.percent) === 'danger'"
+                [class.warning]="progressClass(item.percent) === 'warning'"
+                [style.width.%]="item.percent > 100 ? 100 : item.percent"
+              ></div>
+            </div>
+            <small [class.danger-text]="item.percent >= 100">{{ item.percent }}%</small>
+          </div>
+        </div>
+        <ng-template #noBudget><p class="empty-state">{{ labels.noData }}</p></ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<a routerLink="/transactions/new" class="fab" [attr.aria-label]="labels.newTransaction">+</a>

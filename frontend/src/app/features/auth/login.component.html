@@ -1,0 +1,39 @@
+<div class="login-page">
+  <div class="card login-card">
+    <div class="login-brand">
+      <span class="login-mark">⌂</span>
+      <h1>{{ labels.appName }}</h1>
+      <p class="muted">{{ labels.login }}</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="email">{{ labels.email }}</label>
+        <input id="email" type="email" formControlName="email" autocomplete="email" />
+        <small class="field-error" *ngIf="form.controls.email.touched && form.controls.email.errors?.['required']">
+          {{ messages.required }}
+        </small>
+        <small class="field-error" *ngIf="form.controls.email.touched && form.controls.email.errors?.['email']">
+          {{ messages.invalidEmail }}
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="password">{{ labels.password }}</label>
+        <input id="password" type="password" formControlName="password" autocomplete="current-password" />
+        <small class="field-error" *ngIf="form.controls.password.touched && form.controls.password.errors?.['required']">
+          {{ messages.required }}
+        </small>
+        <small class="field-error" *ngIf="form.controls.password.touched && form.controls.password.errors?.['minlength']">
+          {{ messages.minPassword }}
+        </small>
+      </div>
+
+      <p class="field-error" *ngIf="error">{{ error }}</p>
+
+      <button class="btn full-width" type="submit" [disabled]="loading">
+        {{ loading ? labels.loggingIn : labels.login }}
+      </button>
+    </form>
+  </div>
+</div>

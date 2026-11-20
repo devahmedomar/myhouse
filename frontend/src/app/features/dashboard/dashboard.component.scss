@@ -1,0 +1,163 @@
+.period-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  select {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0.4rem 0.6rem;
+    background: #fff;
+    color: var(--text);
+  }
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-top: 4px solid var(--primary);
+
+  strong {
+    font-size: 1.6rem;
+  }
+
+  small {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  &.income {
+    border-top-color: var(--success);
+  }
+
+  &.expense {
+    border-top-color: var(--danger);
+  }
+
+  &.balance {
+    border-top-color: var(--primary);
+  }
+}
+
+.summary-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.income-text {
+  color: var(--success);
+}
+
+.expense-text {
+  color: var(--danger);
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  @media (min-width: 769px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chart-card {
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.canvas-box {
+  position: relative;
+  height: 260px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 769px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+  }
+}
+
+.link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.progress-row {
+  margin-bottom: 0.9rem;
+
+  small {
+    display: block;
+    color: var(--muted);
+  }
+}
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.progress-track {
+  height: 9px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  margin: 0.3rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--success);
+
+  &.warning {
+    background: var(--accent);
+  }
+
+  &.danger {
+    background: var(--danger);
+  }
+}
+
+.danger-text {
+  color: var(--danger) !important;
+}

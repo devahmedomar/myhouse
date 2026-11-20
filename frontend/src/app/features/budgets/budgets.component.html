@@ -1,0 +1,44 @@
+<div class="page">
+  <div class="page-header">
+    <h1>{{ labels.budgets }}</h1>
+    <div class="period-controls">
+      <select [(ngModel)]="month" (ngModelChange)="load()" aria-label="الشهر">
+        <option *ngFor="let m of months; let i = index" [ngValue]="i + 1">{{ m }}</option>
+      </select>
+      <select [(ngModel)]="year" (ngModelChange)="load()" aria-label="السنة">
+        <option *ngFor="let y of years" [ngValue]="y">{{ y }}</option>
+      </select>
+    </div>
+  </div>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <div class="card" *ngIf="!loading">
+    <div class="field total-field">
+      <label for="total-budget">{{ labels.totalBudget }} ({{ currency }})</label>
+      <input id="total-budget" type="number" min="0" step="0.01" [(ngModel)]="totalBudget" />
+    </div>
+
+    <h3 class="section-title">{{ labels.perCategoryBudget }}</h3>
+
+    <div *ngIf="categories.length; else noCategories">
+      <div class="budget-row" *ngFor="let category of categories">
+        <span>{{ category.icon }} {{ category.name }}</span>
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          [attr.aria-label]="category.name"
+          [(ngModel)]="categoryBudgets[category._id]"
+        />
+      </div>
+    </div>
+    <ng-template #noCategories><p class="empty-state">{{ labels.noData }}</p></ng-template>
+
+    <button type="button" class="btn save-button" (click)="save()" [disabled]="saving">
+      {{ saving ? labels.loading : labels.saveChanges }}
+    </button>
+  </div>
+</div>
+
+<a routerLink="/transactions/new" class="fab" aria-label="إضافة معاملة">+</a>

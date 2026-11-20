@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out-tsc/
+.angular/cache/
+
+# Local environment secrets
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json

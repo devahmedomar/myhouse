@@ -1,0 +1,14 @@
+<div class="backdrop" *ngIf="visible" (click)="cancelled.emit()">
+  <div class="dialog" role="alertdialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <h3>{{ title }}</h3>
+    <p>{{ message }}</p>
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" (click)="cancelled.emit()">
+        {{ labels.cancel }}
+      </button>
+      <button type="button" class="btn btn-danger" (click)="confirmed.emit()">
+        {{ labels.confirm }}
+      </button>
+    </div>
+  </div>
+</div>

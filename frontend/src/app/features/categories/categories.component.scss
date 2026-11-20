@@ -1,0 +1,42 @@
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  select {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 0.45rem 0.6rem;
+    background: #fff;
+    color: var(--text);
+  }
+}
+
+.form-card {
+  margin-bottom: 1rem;
+
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 1rem;
+
+  @media (min-width: 769px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.4rem;
+}
