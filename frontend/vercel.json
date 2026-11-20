@@ -1,3 +1,5 @@
 {
+  "framework": "angular",
+  "outputDirectory": "dist/household-expenses/browser",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
