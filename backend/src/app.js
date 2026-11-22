@@ -12,7 +12,7 @@ app.disable('x-powered-by');
 // CORS is limited to the exact origin(s) configured in the environment.
 const allowedOrigins = (process.env.CORS_ORIGIN || '')
   .split(',')
-  .map((origin) => origin.trim())
+  .map((origin) => origin.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
 app.use(helmet());
